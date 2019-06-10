@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+import json
+import sys
+import os
+import argparse
+
+def json_prettify(fjson, code = 'utf-8', override = True):
+    with open(fjson, encoding = code) as f:
+        j = json.load(f)
+        if override:
+            f.close()
+            ff = open(fjson, "w", encoding = code)
+            json.dump(j, ff, indent = 4, ensure_ascii = False)
+            ff.close()
+        else:
+            (pa, ba) = os.path.split(fjson)
+            ff = open(pa + "prettified_" + ba, "w", encoding = code)
+            json.dump(j, ff, indent = 4, ensure_ascii = False)
+            ff.close()
+        print('Done!')
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description = 'Prettify a json.')
+    parser.add_argument("json_file")
+    parser.add_argument("-r", action = 'store_true', default = True)
+    parser.add_argument("-c", action = 'store', default = 'utf-8')
+    res = parser.parse_args()
+    json_prettify(res.json_file, code = res.c, override = res.r) 
